@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_with_href(self):
@@ -42,6 +42,38 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode("img", "An image", {"src": "image.jpg", "alt": "Description", "width": "500"})
         self.assertEqual(node.to_html(), '<img src="image.jpg" alt="Description" width="500">An image</img>')
 
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
+
+    def test_parent_node_with_no_children(self):
+        parent_node = ParentNode("div", [])
+        self.assertEqual(parent_node.to_html(), "<div></div>")
+
+    def test_parent_node_with_one_child(self):
+        child_node = LeafNode("span", "child content")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child content</span></div>")
+
+    def test_parent_node_with_props(self):
+        parent_node = ParentNode("div", [], {"class": "center", "id": "main"})
+        self.assertEqual(parent_node.to_html(), '<div class="center" id="main"></div>')
+
+    def test_nested_parent_nodes(self):
+        child_node = ParentNode("p", [LeafNode(None, "nested child")])
+        parent_node = ParentNode("div", [child_node])
+        # Testing that it returns some kind of valid HTML string for now
+        self.assertTrue(parent_node.to_html().startswith("<div>"))
 
 if __name__ == "__main__":
     unittest.main()
