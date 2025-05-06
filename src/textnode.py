@@ -45,3 +45,5 @@ def text_node_to_html_node(text_node):
             )
 
 
+#def extract_markdown_images(text):
+#something
