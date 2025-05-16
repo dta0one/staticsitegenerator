@@ -1,6 +1,5 @@
-import re
 from textnode import TextNode, TextType
-
+from inline_markdown import extract_markdown_images, extract_markdown_links
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -124,18 +123,3 @@ def split_nodes_link(old_nodes):
         else:
             new_nodes.append(node)
     return new_nodes
-
-def extract_markdown_images(text):
-    # This regex looks for image pattern: ![alt text](url)
-    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
-    matches = re.findall(pattern, text)
-    return matches
-
-def extract_markdown_links(text):
-    # This regex looks for link pattern: [anchor text](url)
-    # The (?<!!) ensures we don't match image patterns
-    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
-    matches = re.findall(pattern, text)
-    return matches
-
-
