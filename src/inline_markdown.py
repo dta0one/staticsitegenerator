@@ -139,3 +139,8 @@ def extract_markdown_links(text):
     return matches
 
 
+def text_to_textnodes(text):
+    textnodes = []
+
+
+    return textnodes
