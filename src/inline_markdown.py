@@ -45,6 +45,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     
     return new_nodes
 
+
 def split_nodes_image(old_nodes):
     new_nodes = []
     images_found = []
@@ -125,6 +126,7 @@ def split_nodes_link(old_nodes):
             new_nodes.append(node)
     return new_nodes
 
+
 def extract_markdown_images(text):
     # This regex looks for image pattern: ![alt text](url)
     pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
@@ -139,8 +141,24 @@ def extract_markdown_links(text):
     return matches
 
 
+#creating specific functions from main delimiter function
+def split_nodes_bold(old_nodes):
+    return split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
+
+def split_nodes_italic(old_nodes):
+    return split_nodes_delimiter(old_nodes, "_", TextType.ITALIC)
+
+def split_nodes_code(old_nodes):
+    return split_nodes_delimiter(old_nodes, "`", TextType.CODE)
+
+
+#the actual function using everything to markdown text
 def text_to_textnodes(text):
-    textnodes = []
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    nodes = split_nodes_bold(nodes)
+    nodes = split_nodes_italic(nodes)
+    nodes = split_nodes_code(nodes)
+    return nodes
 
-
-    return textnodes
