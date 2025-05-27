@@ -1,8 +1,9 @@
-import re
-#from xxx import yyy
 
 def markdown_to_blocks(markdown):
-    split_blocks = markdown.split("\n\n")
-    pass
+    blocks = markdown.split("\n\n")
+    stripped_block = []
+    for block in blocks:
+        if block.strip():
+            stripped_block.append(block.strip())
 
-    return split_blocks
+    return stripped_block
