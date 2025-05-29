@@ -22,7 +22,35 @@ This is the same paragraph on a new line
             ],
         )
 
+    def test_excessive_newlines(self):
+        md = """
+This is excessive newlines here
 
+
+
+lots of new lines
+"""
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is excessive newlines here",
+                "lots of new lines",
+            ],
+        )
+
+    def test_three_split_sequences(self):
+        md ="""
+Testing three \n\n\n newlines
+"""
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "Testing three",
+                "newlines"
+            ]
+        )
 
 if __name__ == "__main__":
     unittest.main()
