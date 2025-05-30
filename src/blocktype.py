@@ -11,21 +11,16 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered_list"
 
 def block_to_block_type(block):
-    lines = block.split('\n')
-    if re.match(r"^#{1,6} (.*)", block):
+    lines = block.strip().split('\n')
+    if re.match(r"^#{1,6} (.*)", block) and len(lines) == 1:
         return BlockType.HEADING
-    if re.search(r"^`{3}(.*)`{3}$", block, re.DOTALL):
+    if re.match(r"^`{3}$", lines[0]) and re.match(r"^`{3}$", lines[-1]):
         return BlockType.CODE
-    if re.match(r"^>", block):
-        if all(re.match(r"^>", line) for line in lines):
-            return BlockType.QUOTE
-    if re.match(r"^- ", block):
-        if all(re.match("^- ", line) for line in lines):
-            return BlockType.UNORDERED_LIST
-    #if re.match(r"^1. ", block):
-    #    for line in lines:
-    #        if re.match(r"^{n}. ")
-    #    return BlockType.ORDERED_LIST
-
+    if all(re.match(r"^>", line) for line in lines):
+        return BlockType.QUOTE
+    if all(re.match("^- ", line) for line in lines):
+        return BlockType.UNORDERED_LIST
+    if all(re.match(rf"^{i}\. ", line) for i, line in enumerate(lines, start=1)):
+        return BlockType.ORDERED_LIST
     else:
         return BlockType.PARAGRAPH
