@@ -2,6 +2,7 @@ import re
 from splitblocks import markdown_to_blocks
 from blocktype import BlockType, block_to_block_type
 from htmlnode import HTMLNode, ParentNode, LeafNode
+from textnode import TextNode, text_node_to_html_node
 
 def markdown_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
