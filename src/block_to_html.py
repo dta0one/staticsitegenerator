@@ -12,7 +12,7 @@ def markdown_html_node(markdown):
             case BlockType.HEADING:
                 pass
             case BlockType.CODE:
-                pass
+                block = ParentNode("code", text_to_children(block), None)
             case BlockType.QUOTE:
                 block = ParentNode("blockquote", text_to_children(block), None)
             case BlockType.UNORDERED_LIST:
