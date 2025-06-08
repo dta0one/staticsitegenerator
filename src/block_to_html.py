@@ -35,6 +35,7 @@ def markdown_to_html_node(markdown):
             case BlockType.PARAGRAPH:
                 new_block = ParentNode("p", text_to_children(block), None)
                 new_node.append(new_block)
+    print (new_node)
     return ParentNode("div", new_node, None)
 
 
