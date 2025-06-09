@@ -154,7 +154,6 @@ def split_nodes_code(old_nodes):
 
 #the actual function using everything to markdown text
 def text_to_textnodes(text):
-    print (text)
     nodes = [TextNode(text, TextType.TEXT)]
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)

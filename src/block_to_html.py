@@ -10,14 +10,12 @@ def markdown_to_html_node(markdown):
     new_node = []
     for block in blocks:
         type = block_to_block_type(block)
-        print (block, type)
         match type:
             case BlockType.HEADING:
                 matches = re.match(r"^#{1,6}", block)
                 count = len(matches.group(0)) if matches else 0
                 new_block = ParentNode(f"h{count}", text_to_children(block[{count + 1}:]), None)
                 new_node.append(new_block)
-                print("Processing as HEADING block")
             case BlockType.CODE:
                 split_block = block.splitlines()
                 sliced_block = [line.lstrip() for line in split_block[1:-1]]
@@ -25,31 +23,25 @@ def markdown_to_html_node(markdown):
                 inner_block = [text_node_to_html_node(TextNode(joined_sliced_block, TextType.CODE))]
                 new_block = ParentNode("pre", inner_block, None)
                 new_node.append(new_block)
-                print("Processing as CODE block")
             case BlockType.QUOTE:
                 new_block = ParentNode("blockquote", text_to_children(block), None)
                 new_node.append(new_block)
-                print("Processing as QUOTE block")
             case BlockType.UNORDERED_LIST:
                 new_block = ParentNode("ul", list_to_children(block), None)
                 new_node.append(new_block)
-                print("Processing as UNORDERED_LIST block")
             case BlockType.ORDERED_LIST:
                 new_block = ParentNode("ol", list_to_children(block), None)
                 new_node.append(new_block)
-                print("Processing as ORDERED_LIST block")
             case BlockType.PARAGRAPH:
                 split_block = block.splitlines()
                 cleaned_block = [line.strip() for line in split_block]
                 joined_block = " ".join(cleaned_block)
                 new_block = ParentNode("p", text_to_children(joined_block), None)
                 new_node.append(new_block)
-                print("Processing as PARAGRAPH block")
     return ParentNode("div", new_node, None)
 
 
 def text_to_children(text):
-    print (text)
     nodes = text_to_textnodes(text)
     children = []
     for node in nodes:
