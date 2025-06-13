@@ -1,4 +1,4 @@
-import re
+import re, os
 
 from block_to_html import markdown_to_html_node
 from htmlnode import HTMLNode
@@ -18,5 +18,12 @@ def generate_page(from_path, template_path, dest_path):
         template = file.read()
     processed_content = markdown_to_html_node(content).to_html()    
     processed_title = extract_title(content)
-
+    new_page = (template
+        .replace("{{ Title }}", processed_title)
+        .replace("{{ Content }}", processed_content)
+    )
+    
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    with open(dest_path, "w") as file:
+        file.write(new_page)
 

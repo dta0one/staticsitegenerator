@@ -14,7 +14,7 @@ def markdown_to_html_node(markdown):
             case BlockType.HEADING:
                 matches = re.match(r"^#{1,6}", block)
                 count = len(matches.group(0)) if matches else 0
-                new_block = ParentNode(f"h{count}", text_to_children(block[{count + 1}:]), None)
+                new_block = ParentNode(f"h{count}", text_to_children(block[count + 1:]), None)
                 new_node.append(new_block)
             case BlockType.CODE:
                 split_block = block.splitlines()
@@ -52,7 +52,7 @@ def text_to_children(text):
 def list_to_children(text):
     children = []
     for line in text.split("\n"):
-        if re.match("^- ", line) or re.match("^* ", line) or re.match("^+ ", line):
+        if re.match("^- ", line) or re.match(r"^\* ", line) or re.match(r"^\+ ", line):
             children.append(ParentNode("li",text_to_children(line[2:]), None))
         elif re.match(rf"^\d+. ", line):
             match_ordered = re.match(rf"^\d+. ", line)

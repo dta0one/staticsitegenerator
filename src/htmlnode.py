@@ -1,3 +1,6 @@
+tag_void_elements = {"img", "br", "hr", "input", "meta", "link", "area", "base", "col", "embed", "param", "source", "track", "wbr"}
+
+
 class HTMLNode():
 	def __init__(self, tag=None, value=None, children=None, props=None):
 		self.tag = tag
@@ -27,7 +30,7 @@ class LeafNode(HTMLNode):
 		super(LeafNode, self).__init__(tag, value, None, props)
 
 	def to_html(self):
-		if not self.value:
+		if not self.value and self.tag not in tag_void_elements:
 			raise ValueError("All leaf nodes must have a value")
 		if self.tag is None:
 			return self.value
