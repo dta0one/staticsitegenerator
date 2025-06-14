@@ -10,7 +10,7 @@ def extract_title(markdown):
         raise Exception("No h1 header")
     return h1.group(1)
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path}, to {dest_path} using {template_path}.")
 
     with open(from_path) as file:
@@ -25,17 +25,23 @@ def generate_page(from_path, template_path, dest_path):
     new_page = (template
         .replace("{{ Title }}", processed_title)
         .replace("{{ Content }}", processed_content)
+        .replace(f"href=\"/", f"href=\"{basepath}")
+        .replace(f"src=\"/", f"src=\"{basepath}")
     )
     
+#   replace:
+#   href="/ with href="{basepath}
+#   src="/ with src="{basepath}
+
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
     with open(dest_path, "w") as file:
         file.write(new_page)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     markdown_files = glob.glob(f"{dir_path_content}/**/*.md", recursive=True)
 
     for markdown_file in markdown_files:
         html_file = markdown_file.replace(dir_path_content, dest_dir_path, 1).replace(".md", ".html")
         os.makedirs(os.path.dirname(html_file), exist_ok=True)
-        generate_page(markdown_file, template_path, html_file)
+        generate_page(markdown_file, template_path, html_file, basepath)
