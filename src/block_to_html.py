@@ -9,8 +9,8 @@ def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     new_node = []
     for block in blocks:
-        type = block_to_block_type(block)
-        match type:
+        block_type = block_to_block_type(block)
+        match block_type:
             case BlockType.HEADING:
                 matches = re.match(r"^#{1,6}", block)
                 count = len(matches.group(0)) if matches else 0
@@ -24,7 +24,14 @@ def markdown_to_html_node(markdown):
                 new_block = ParentNode("pre", inner_block, None)
                 new_node.append(new_block)
             case BlockType.QUOTE:
-                new_block = ParentNode("blockquote", text_to_children(block), None)
+                cleaned_block = []
+                for line in block.splitlines():
+                    if line.startswith(">"):
+                        cleaned_block.append(line[1:].lstrip())
+                    else:
+                        cleaned_block.append(line)
+                joined_block = "\n".join(cleaned_block)
+                new_block = ParentNode("blockquote", text_to_children(joined_block), None)
                 new_node.append(new_block)
             case BlockType.UNORDERED_LIST:
                 new_block = ParentNode("ul", list_to_children(block), None)

@@ -1,5 +1,4 @@
-import os
-import shutil
+import os, shutil, glob
 
 from copystatic import copy_files_recursive
 from utils import generate_page
